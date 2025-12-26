@@ -1,6 +1,6 @@
 # OS Memory Management Simulator
 
-An interactive simulation of Operating System memory management techniques, implemented in Python using CustomTkinter. The project visualizes **Contiguous Memory Allocation** (Variable Partitioning) and also **Non-Contiguous Paging**, showing concepts like fragmentation, swapping, and page tables.
+An interactive simulation of Operating System memory management techniques, implemented in Python using CustomTkinter. The project visualizes Contiguous Memory Allocation (Variable Partitioning) and also Non-Contiguous Paging, showing concepts like fragmentation, swapping, and page tables.
 
 ## Table of Contents
 - [OS Memory Management Simulator](#os-memory-management-simulator)
