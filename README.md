@@ -1,80 +1,84 @@
 # OS Memory Management Simulator
 
-![Python](https://img.shields.io/badge/Python-3.x-blue?style=for-the-badge&logo=python)
-![GUI](https://img.shields.io/badge/Interface-CustomTkinter-green?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-orange?style=for-the-badge)
+An interactive simulation of Operating System memory management techniques, implemented in Python using CustomTkinter. The project visualizes **Contiguous Memory Allocation** (Variable Partitioning) and **Non-Contiguous Paging**, showing concepts like fragmentation, swapping, and page tables.
 
-A powerful, interactive Operating System simulator that visualizes **Contiguous Memory Allocation** (Variable Partitioning) and **Non-Contiguous Paging** techniques. Designed to demonstrate complex OS concepts like fragmentation, swapping, and address translation in real-time.
+## Table of Contents
+- [OS Memory Management Simulator](#os-memory-management-simulator)
+  - [Features & Algorithms](#features--algorithms)
+    - [Contiguous Memory Allocation](#contiguous-memory-allocation)
+    - [Paging (Non-Contiguous Allocation)](#paging-non-contiguous-allocation)
+    - [First Fit](#first-fit)
+    - [Best Fit](#best-fit)
+    - [Worst Fit](#worst-fit)
+    - [Memory Compaction](#memory-compaction)
+    - [Swapping Mechanism](#swapping-mechanism)
+  - [Installation](#installation)
+  - [Usage Guide](#usage-guide)
+  - [Contributors](#contributors)
 
-## 📋 Table of Contents
-- [About the Project](#about-the-project)
-- [Key Features](#key-features)
-- [Algorithms Implemented](#algorithms-implemented)
-- [Screenshots](#screenshots)
-- [Getting Started](#getting-started)
-- [Project Structure](#project-structure)
+## Features & Algorithms
 
-## 📖 About the Project
+### Contiguous Memory Allocation
+- **Variable Partitioning:** The simulator manages memory as a continuous block. Processes are allocated specific contiguous chunks of RAM.
+- **Visual Representation:** The gui displays a linear memory bar where users can see exactly where a process resides and where holes are located.
+- **External Fragmentation:** Visually demonstrates how loading and unloading processes of different sizes creates unusable gaps between allocated blocks.
 
-This application simulates how an Operating System manages Random Access Memory (RAM). It bridges the gap between theoretical concepts and practical implementation by providing a visual interface for allocating, deallocating, and swapping processes.
+### Paging (Non-Contiguous Allocation)
+- **Grid-Based Visualization:** Unlike contiguous allocation, paging helps us visualize memory as a grid of fixed-size frames.
+- **Scattered Allocation:** Demonstrates how a single process can be broken into "pages" and scattered across non-adjacent physical frames, effectively solving external fragmentation.
+- **Page Table Inspector:** A unique feature that allows users to select a Process ID and view the exact Page-to-Frame mapping table, bridging the gap between logical and physical addresses.
+- **Internal Fragmentation:** Visually highlights wasted space within the last frame of a process when the process size is not a perfect multiple of the frame size.
 
-Users can experiment with different allocation strategies, trigger memory compaction to solve fragmentation, and inspect page tables to understand how logical addresses map to physical frames.
+### First Fit
+- **First Fit** is an allocation strategy that searches the list of free memory blocks from the beginning and allocates the *first* block that is large enough to hold the process.
+- It is generally faster because it minimizes the search time, but it tends to concentrate allocation at the start of memory, potentially leaving small, unusable holes at the beginning.
 
-## ✨ Key Features
+### Best Fit
+- **Best Fit** searches the entire list of free memory blocks and allocates the *smallest* hole that is big enough to hold the process.
+- This strategy attempts to minimize wasted space by leaving the smallest possible leftover hole. However, it often results in creating tiny, useless fragments that are too small to be used by any future process.
 
-### 🧠 1. Contiguous Memory Manager (Variable Partitioning)
-* **Dynamic Allocation:** visually allocates memory blocks of varying sizes.
-* **Swapping Mechanism:** Automatically identifies "victim" processes and swaps them to a secondary **Disk (Virtual Memory)** when RAM is full, restoring them later when space becomes available.
-* **Memory Compaction:** Includes a "Defragmentation" tool that coalesces scattered free holes into a single usable block, solving external fragmentation.
-* **Real-time Visualization:** Dual-canvas display showing the state of Main Memory vs. Backing Store (Disk).
+### Worst Fit
+- **Worst Fit** searches the entire list and allocates the *largest* available hole.
+- The philosophy behind this is that the remaining leftover hole will be large enough to be useful for another process. It effectively prevents the creation of tiny, unusable fragments but consumes the largest contiguous blocks quickly.
 
-### 📄 2. Paging Memory Manager (Non-Contiguous)
-* **Scattered Frame Visualization:** Uses a grid-based system to demonstrate how a single process is broken into pages and scattered across non-adjacent physical frames.
-* **Page Table Inspector:** A built-in inspection tool that allows users to select any active Process ID and view its exact Page-to-Frame mapping.
-* **Internal Fragmentation:** Visually represents wasted space within the last frame of a process.
-* **Randomized Allocation:** Simulates realistic physical frame selection using randomized logic to prove non-contiguous capability.
+### Memory Compaction
+- **Defragmentation:** The simulator includes a "Compact" feature for the Contiguous Memory mode.
+- When triggered, it shifts all active processes to the top of the memory addresses (0x00) and merges all scattered free holes into one large, usable block at the bottom. This effectively solves the issue of External Fragmentation.
 
-## 🚀 Algorithms Implemented
+### Swapping Mechanism
+- **Virtual Memory Simulation:** The project implements a robust swapping system. When Main Memory (RAM) is full, the system automatically identifies a "victim" process.
+- **Backing Store:** The victim process is moved to a secondary "Disk" visualization. When space becomes available (or the user requests it), the process can be swapped back into RAM. This simulates the lifecycle of a process moving between Ready and Suspended states.
 
-The simulator allows users to switch between standard allocation strategies on the fly:
+## Installation
+1- Clone the repository
+```bash
+git clone https://github.com/yourusername/os-memory-simulator.git
+```
 
-1.  **First Fit:** Allocates the first hole that is big enough. Fastest but causes fragmentation.
-2.  **Best Fit:** Allocates the smallest hole that is big enough. Minimizes immediate waste but creates tiny, unusable holes.
-3.  **Worst Fit:** Allocates the largest available hole. Prevents tiny holes but consumes large contiguous blocks quickly.
+2- Install the required dependencies (CustomTkinter)
+```bash
+pip install customtkinter
+```
 
-## 📸 Screenshots
+3- Run the application
+```bash
+python gui.py
+```
 
-### Contiguous Allocation & Swapping
-*Visualizes variable partitioning, showing processes in RAM (Green) and Swapped to Disk (Blue).*
-![Contiguous Memory Demo](https://via.placeholder.com/800x400?text=Insert+Screenshot+of+Tab+1+Here)
+## Usage Guide
+The application is split into two main tabs:
 
-### Paging & Page Table Inspector
-*Visualizes scattered frames and the inspector tool showing logical-to-physical mapping.*
-![Paging Demo](https://via.placeholder.com/800x400?text=Insert+Screenshot+of+Tab+2+Here)
+**Tab 1: Older OS (Contiguous)**
+- **Input:** Enter a Process ID (e.g., "P1") and Size (KB).
+- **Select Algorithm:** Choose First Fit, Best Fit, or Worst Fit from the dropdown.
+- **Allocate:** Click to place the process in RAM.
+- **Compact:** If fragmentation prevents allocation, click "Run Compaction" to merge free space.
 
-## 🛠 Getting Started
+**Tab 2: Modern OS (Paging)**
+- **Input:** Enter Process ID and Size.
+- **Allocate:** The system automatically divides the process into pages and assigns them to random free frames.
+- **Inspector:** Use the "Inspector" dropdown to select a process and view its Page Table (Logical Page # -> Physical Frame #).
 
-### Prerequisites
-* Python 3.x
-* CustomTkinter (`pip install customtkinter`)
+## Contributors
 
-### Installation
-1.  Clone the repository:
-    ```bash
-    git clone [https://github.com/yourusername/os-memory-simulator.git](https://github.com/yourusername/os-memory-simulator.git)
-    ```
-2.  Navigate to the directory:
-    ```bash
-    cd os-memory-simulator
-    ```
-3.  Run the application:
-    ```bash
-    python gui.py
-    ```
-
-## 📂 Project Structure
-
-```text
-├── gui.py                # Main Entry Point. Handles UI layout, user inputs, and drawing logic.
-├── memory_managers.py    # Backend Logic. Contains the classes for ContiguousManager and PagingManager.
-└── README.md             # Documentation.
+- [Shafwath Tamjid](https://github.com/shafz04-sys)
